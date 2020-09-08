@@ -18,6 +18,8 @@
                 int hp;
 		int hpfull;
 		int forca;
+		int agilidade;
+		int dodgechance;
 		int defesa;
 		int xp;
 		int xpneed;
@@ -31,12 +33,14 @@
                 int hp;
 		int forca;
 		int defesa;
+		int agilidade;
+		int dodgechance;
 		int xp;
        
              };
 
-       struct jogador player = {10,10,2,1,0,10,1};
-       struct monstros goblin = {"goblin",5,1,1,5};
+       struct jogador player = {10,10,2,1,1,1,0,10,1};
+       struct monstros goblin = {"goblin",5,1,1,1,1,5};
        struct monstros *ptrmon;
 
    // Minhas structs
@@ -74,7 +78,20 @@
       int lutar() {
       
                int isluta = 1;
-               int turno = 1;
+	       int turno;
+	       if (player.agilidade > ptrmon->agilidade) {
+
+                          turno = 1;
+			  
+		       } else if ( player.agilidade < ptrmon->agilidade) {
+		       
+		                       turno = 2;
+		       
+		                } else if ( player.agilidade == ptrmon->agilidade) {
+				
+				                      turno = 1;
+				
+			                	};
 	       int atk;
 	       int def;
 	       int matk;
@@ -83,6 +100,18 @@
 	       
 	                  if(turno == 1) {
 			  
+				  dado = rand() % 101;
+				  if (dado == 0) {
+				  
+				           dado = 1;
+				  
+				        };
+				  printf("O resultado do dado de desvio dele foi %d! \n",dado);
+				  if (dado <= ptrmon->dodgechance) {
+				  
+				             printf("Ele desviou do seu ataque! \n");
+				  
+				          } else {
 			          dado = rand() %7;
 				  if (dado == 0) {
 				  
@@ -126,6 +155,8 @@
 					          printf("O bixano está com %d de hp \n",ptrmon->hp);
 
 					       };
+				     };
+
                                   if (ptrmon->hp <= 0) {
 				  
 				           printf("O bixano morreu! \n");
@@ -138,8 +169,21 @@
 			                     turno = 2;
 					     };
 			       };
+
 	       	                  if(turno == 2) {
-			  
+			           
+			          dado = rand() % 101;
+		 		  if (dado == 0) {
+				  
+				           dado = 1;
+				  
+				        };
+		 		  printf("O resultado do seu dado de desvio foi %d! \n",dado);
+				  if (dado <= player.dodgechance) {
+				  
+				       printf("Você desviou do ataque dele! \n");
+				  
+				  } else {		  
 			          dado = rand() %7;
 				  if (dado == 0) {
 				  
@@ -183,6 +227,7 @@
 					          printf("Você está com %d de hp \n",player.hp);
 
 					       };
+				     };
                                   if (player.hp <= 0) {
 				  
 				           printf("Você morreu! \n");
@@ -207,14 +252,18 @@
 		         player.lvl++;
 			 printf("Parabens,você avançou de level! \n");
 			 printf("E agora está no level %d! \n",player.lvl);
-			 printf("Você tem %d de HP,%d de força e %d de defesa \n",player.hp,player.forca,player.defesa);
-			 printf("Escolha entre : \n 1- +5 de HP \n 2- +1 de forca \n 3- +1 de defesa \n");
+			 printf("Você tem %d de HP,%d de força,%d de defesa e %d de agilidade! \n",player.hpfull,player.forca,player.defesa,player.agilidade);
+			 printf("Escolha entre : \n 1- +5 de HP \n 2- +1 de forca \n 3- +1 de defesa \n 4- +1 de agilidade \n");
 			 scanf("%d",&opti);
+			 while(opti < 1 || opti > 4) {
+
+		         printf("Escolha entre : \n 1- +5 de HP \n 2- +1 de forca \n 3- +1 de defesa \n 4- +1 de agilidade \n");	 
+			 scanf("%d",&opti);			 
 			 switch (opti) {
 			 
 			            case 1 :
 					    player.hpfull += 5;
-					    printf("Você colocou o seu ponto em HP! \n");
+					    printf("Você colocou o seu ponto em HP! \n");			    
 					    break;
 			            case 2 :
 					    player.forca++;
@@ -224,12 +273,25 @@
 					    player.defesa++;
 					    printf("Você colocou o seu ponto em defesa! \n");
 					    break;
+          			    case 4 :
+					    player.agilidade++;
+					    printf("Você colocou o seu ponto em agilidade! \n");
+					    player.dodgechance = player.agilidade;
+					    if(player.dodgechance >= 10) {
+					    
+					                   player.dodgechance = 10;
+					    
+					             };
+					    break;
+
 			            default :
-			                     printf("Valor incorreto! \n");		    
+			                     printf("Valor incorreto! \n");
+				             break;	     
 
 			       };
+			   };
 
-			 player.hp = player.hpfull;
+	                 player.hp = player.hpfull;	
 			 player.xpneed = (player.xpneed * 2) + player.xp; 
 		
 		     };
